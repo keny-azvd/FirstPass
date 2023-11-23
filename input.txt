@@ -1,0 +1,51 @@
+To create the database used in this work, we used the image
+bank of the German satellite RapidEye [12]
+
+This satellite was selected because it has a spatial
+resolution of 5 meters per pixel, providing a greater wealth of
+details when considering lower resolution satellites.
+
+ essas imagens datam de 2014, pois o governo brasileiro adquiriu apenas imagens entre 2011 e 2014.
+ 
+ The region chosen comprises the Tapajós Environmental
+Protection Area [13] and part of the Crepori National Forest
+[14]
+
+This region was selected due
+to the abundance of gold exploration areas and the fact that it
+has large areas of national forest and indigenous reserves in its
+adjacencies.
+
+
+To the development of this work, it was necessary to annotate
+the images of the gold exploration locations. Until the writing
+of this work, there were no databases with publicly accessible
+annotations
+
+QGIS. It
+was possible to load the images acquired from RapidEye and
+perform the annotation of such areas.
+
+
+However, this information does not indicate
+the exact boundaries of the areas but only provides the region
+where a gold exploration operation is located.
+
+In addition, visual validation of the annotated areas was
+performed using the aerial view provided by Bing Maps (Aerial
+View - Bing Maps) [17].
+
+inally, binary masks were generated,
+
+
+
+The proposed method diagram for the segmentation of gold
+exploration areas in Amazon forest regions is summarized in
+Figure 4. The first step is the resizing of the created database.
+Then we have the database augmentation, followed by the
+definition of the architecture and the optimization of the loss
+and optimization functions used during the model learning
+process. Finally, we evaluated the obtained results.
+
+
+
