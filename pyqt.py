@@ -3,6 +3,10 @@ from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QVBoxLayou
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton,  QHeaderView
 from PyQt6.QtCore import Qt
+from cryptography.hazmat.primitives.asymmetric import rsa , padding
+from cryptography.hazmat.primitives import serialization 
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from cryptography.hazmat.primitives import hashes
 
 
 class PasswordForm(QWidget):
@@ -13,36 +17,57 @@ class PasswordForm(QWidget):
 
     def initUI(self):
         # Widgets
-        label_secret = QLabel('Secret:')
-        line_edit_secret = QLineEdit(self)
+        self.label_secret = QLabel('Secret:')
+        self.line_edit_secret = QLineEdit(self)
 
-        label_key = QLabel('Key:')
-        line_edit_key = QLineEdit(self)
+        self.label_password = QLabel('Password:')
+        self.line_edit_password = QLineEdit(self)
+        self.line_edit_password.setEchoMode(QLineEdit.EchoMode.Password)
 
         button_login = QPushButton('Add secret', self)
         button_login.clicked.connect(self.encrypt)
 
         # Layout
         layout = QVBoxLayout()
-        layout.addWidget(label_secret)
-        layout.addWidget(line_edit_secret)
-        layout.addWidget(label_key)
-        layout.addWidget(line_edit_key)
+        layout.addWidget(self.label_secret)
+        layout.addWidget(self.line_edit_secret)
+        layout.addWidget(self.label_password)
+        layout.addWidget(self.line_edit_password)
         layout.addWidget(button_login)
 
         self.setLayout(layout)
+        
 
         self.setWindowTitle('Formulário de Login')
         self.show()
     
-    def encrypt(self): # encriptar dados
-        secret = self.findChild(QLineEdit, 'line_edit_secret').text()
-        key = self.findChild(QLineEdit, 'line_edit_key').text()
+    def encrypt(self): 
+        # get variables
+        secret = self.line_edit_secret.text()
+        password = self.line_edit_password.text()
+        message = bytes(password,encoding="utf-8") # convert to bytes
+        
+        #generate private encrypt and storage
+        private_key = rsa.generate_private_key(public_exponent=65537,key_size=2048)
+        pem = private_key.private_bytes(encoding=serialization.Encoding.PEM,format=serialization.PrivateFormat.PKCS8,encryption_algorithm=serialization.BestAvailableEncryption(b'kenner'))
+        f = open(f"./private_keys/{secret}.txt", "w")
+        f.write(pem.decode("utf-8"))
+        f.close()
+        public_key = private_key.public_key()
 
-        print(f'Secret: {secret}, Key: {key}')
+        # encrypt data and storage cypher text
+        ciphertext = public_key.encrypt(message,
+                            padding.OAEP(
+                                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                                algorithm=hashes.SHA256(),
+                                label=None))
+        self.write_data(secret,ciphertext)
 
-    def write_data(self):  # escreve dados no txt
-        return 
+    def write_data(self, secret, ciphertext):  
+        f = open(f"./secrets/{secret}.bin", "wb")
+        f.write(ciphertext)
+        f.close()
+        return None 
 
 
 
@@ -81,11 +106,6 @@ class MainForm(QWidget):
                     item = QTableWidgetItem(f"{hashs[row]}")
                 self.table_widget.setItem(row, col, item)
                 item = self.table_widget.item(row, col)
-        
-        # resize table content
-        #header = self.table_widget.horizontalHeader()
-        #header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-        #header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
 
         # Definir o layout principal da nova tela
         self.setLayout(layout)
