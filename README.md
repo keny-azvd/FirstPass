@@ -9,9 +9,11 @@ Certifique-se de ter os seguintes requisitos instalados antes de executar o cód
 - [Python 3.x](https://www.python.org/downloads/)
 - [PyQt6](https://pypi.org/project/PyQt6/)
 
-## Building...
-
+## Login Screen
+First, we have appears the first screen where user need add the correct password to singin into app. We compare the hash of this input with the hash of correct password to determine if user is owner or not. We are using sha256 encrypt algoritmh and hashlib libary from python.
+<p align="center">
 ![plot](./images/siginscreen.png)
+</p>
 
 
 
