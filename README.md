@@ -11,8 +11,9 @@ Certifique-se de ter os seguintes requisitos instalados antes de executar o cód
 
 ## Login Screen
 First, we have appears the first screen where user need add the correct password to singin into app. We compare the hash of this input with the hash of correct password to determine if user is owner or not. We are using sha256 encrypt algoritmh and hashlib libary from python.
+
 <p align="center">
-![plot](./images/siginscreen.png)
+    <img src="./images/siginscreen.png" alt="Descrição da imagem">
 </p>
 
 
