@@ -12,6 +12,30 @@ import os
 import hashlib
 
 
+
+class DeletePasswordForm(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+    
+    def initUI(self):
+
+        central_widget = QWidget(self)
+        layout = QVBoxLayout(central_widget)
+
+        self.line_delete_secret = QLineEdit(self)
+
+        # Adicione um botão para fechar a janela
+        btn_delete = QPushButton("Delete", self)
+        btn_delete.clicked.connect(self.FindSecret)
+            
+        layout.addWidget(self.line_delete_secret)
+        self.setCentralWidget(central_widget)
+        self.setWindowTitle("Visualizador de Senha")
+
+    def FindSecret():
+        return 0
+
 class SenhaViewer(QMainWindow):
     def __init__(self, senha):
         super().__init__()
@@ -108,11 +132,13 @@ class MainForm(QWidget):
         # Widgets para a nova tela
         self.label_welcome = QLabel('Password Manager!')
         self.query_button_addpwd = QPushButton('Add new password')
+        self.query_button_delpwd = QPushButton('Delete password')
 
         # Layout da nova tela
         layout = QVBoxLayout()
         layout.addWidget(self.label_welcome)
         layout.addWidget(self.query_button_addpwd)
+        layout.addWidget(self.query_button_delpwd)
         self.table_widget = QTableWidget()
         
         self.write_table()
@@ -125,6 +151,7 @@ class MainForm(QWidget):
 
         # Conectar o botão de consulta e inserção a uma função
         self.query_button_addpwd.clicked.connect(self.add_pwd)
+        self.query_button_delpwd.clicked.connect(self.del_pwd)
         self.table_widget.cellClicked.connect(self.cell_clicked)
         self.table_widget.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
@@ -151,6 +178,11 @@ class MainForm(QWidget):
     def add_pwd(self):
         self.passwordform = PasswordForm()
         self.passwordform.show()
+        self.close()
+    
+    def del_pwd(self):
+        self.delpasswordform = DeletePasswordForm()
+        self.delpasswordform.show()
         self.close()
     
     def read_content(self):
@@ -235,7 +267,6 @@ class MyForm(QWidget):
         master_data = open(f"./master.txt", "r")
         master_hash = master_data.read()
         if(password_hash == master_hash.strip()):
-            print('Você está dentro')
             # if password is correct, will allow go to main form
             self.new_form = MainForm()
             self.new_form.show()
