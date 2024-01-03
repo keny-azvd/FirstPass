@@ -33,7 +33,17 @@ class DeletePasswordForm(QMainWindow):
         self.setCentralWidget(central_widget)
         self.setWindowTitle("Visualizador de Senha")
 
-    def FindSecret():
+    def FindSecret(self):
+        #get credentials
+        secret = self.line_delete_secret.text() + '.bin'
+        
+        for root, dir, files in os.walk('./secrets/'):
+            if (secret in files):
+                full_path = './secrets/' + secret
+                os.remove(full_path)
+                self.mainform = MainForm()
+                self.mainform.show()
+                self.close()
         return 0
 
 class SenhaViewer(QMainWindow):
