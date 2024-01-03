@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton,  QHeaderView ,QMainWindow
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton,  QHeaderView 
 from PyQt6.QtCore import Qt
 from cryptography.hazmat.primitives.asymmetric import rsa , padding
 from cryptography.hazmat.primitives import serialization 
@@ -11,26 +11,6 @@ from cryptography.hazmat.backends import default_backend
 import os
 import hashlib
 
-
-class SenhaViewer(QMainWindow):
-    def __init__(self, senha):
-        super().__init__()
-
-        central_widget = QWidget(self)
-        layout = QVBoxLayout(central_widget)
-
-        # Adicione um QLabel ou outro widget para exibir a senha
-        self.label_senha = QLabel(f"Senha: {senha}", self)
-
-        # Adicione um botão para fechar a janela
-        btn_fechar = QPushButton("Fechar", self)
-        btn_fechar.clicked.connect(self.close)
-
-        layout.addWidget(self.label_senha)
-        layout.addWidget(btn_fechar)
-
-        self.setCentralWidget(central_widget)
-        self.setWindowTitle("Visualizador de Senha")
 
 class PasswordForm(QWidget):
     def __init__(self):
@@ -187,15 +167,13 @@ class MainForm(QWidget):
                             label=None
                         )
                     )
-
-            #print(plaintext.decode('utf-8'))
-
-                  # Crie uma instância da nova classe SenhaViewer
-            self.viewer = SenhaViewer(plaintext.decode('utf-8'))
-            self.viewer.show()
+            print(plaintext.decode('utf-8'))
 
                                     
             
+
+            
+
 
 class MyForm(QWidget):
     def __init__(self):
@@ -235,8 +213,6 @@ class MyForm(QWidget):
         master_data = open(f"./master.txt", "r")
         master_hash = master_data.read()
         if(password_hash == master_hash.strip()):
-            print('Você está dentro')
-            # if password is correct, will allow go to main form
             self.new_form = MainForm()
             self.new_form.show()
             self.close()
